@@ -1,0 +1,169 @@
+<div id="sf-neural-abyss">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --core-glow: #00ffcc;
+      --energy-line: rgba(0, 255, 204, 0.2);
+      --void-bg: #010204;
+    }
+
+    #sf-neural-abyss {
+      width: 100%; height: 700px;
+      background: var(--void-bg);
+      position: relative; overflow: hidden;
+      cursor: none; /* We will use a custom cursor */
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* CUSTOM GAMING CURSOR */
+    #abyss-cursor {
+      position: absolute; width: 40px; height: 40px;
+      border: 2px solid var(--core-glow); border-radius: 50%;
+      pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s;
+      box-shadow: 0 0 15px var(--core-glow);
+    }
+
+    /* LIVE FLOATING ORBS */
+    .service-orb {
+      position: absolute; width: 120px; height: 120px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), transparent);
+      border: 1px solid var(--energy-line); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; color: #fff; cursor: pointer;
+      transition: border 0.3s, box-shadow 0.3s;
+      z-index: 10; backdrop-filter: blur(5px);
+    }
+
+    .service-orb:hover {
+      border-color: var(--core-glow);
+      box-shadow: 0 0 30px var(--core-glow);
+      background: rgba(0, 255, 204, 0.05);
+    }
+
+    .orb-label {
+      font-family: 'Orbitron'; font-size: 0.7rem; 
+      letter-spacing: 1px; padding: 10px; pointer-events: none;
+    }
+
+    /* ENERGY TENDRILS (SVG) */
+    #energy-web {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 5;
+    }
+
+    /* DATA PANEL (MODAL) */
+    #abyss-modal {
+      display: none; position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%); width: 400px;
+      background: rgba(0, 0, 0, 0.95); border: 2px solid var(--core-glow);
+      padding: 40px; z-index: 1000; color: #fff;
+    }
+    .close-abyss { 
+      margin-top: 20px; background: var(--core-glow); color: #000;
+      border: none; padding: 10px 20px; font-weight: 900; cursor: pointer; width: 100%;
+    }
+  </style>
+
+  <div id="abyss-cursor"></div>
+  <svg id="energy-web"></svg>
+
+  <div id="orb-container">
+    </div>
+
+  <div id="abyss-modal">
+    <h2 id="m-title" style="font-family: 'Orbitron'; color: var(--core-glow);"></h2>
+    <p id="m-desc" style="margin-top: 15px; line-height: 1.6;"></p>
+    <button class="close-abyss" onclick="closeAbyss()">TERMINAL_EXIT</button>
+  </div>
+</div>
+
+<script>
+  const services = [
+    { n: "Facility Mgmt", d: "Building and infrastructure management services." },
+    { n: "Maintenance", d: "Operational maintenance and repair services." },
+    { n: "Event Mgmt", d: "Planning and execution of corporate events." },
+    { n: "PR Comms", d: "Brand image management and media communication." },
+    { n: "Media Prod", d: "Photo, video, and digital media creation." },
+    { n: "Advertising", d: "Brand promotion through multi-channels." },
+    { n: "Printing", d: "Professional printing for business materials." },
+    { n: "Packaging", d: "Creative and functional product packaging." },
+    { n: "Product Dev", d: "From idea to launch product services." },
+    { n: "Expansion", d: "Scaling, growth, and market expansion." }
+  ];
+
+  const container = document.getElementById('sf-neural-abyss');
+  const orbContainer = document.getElementById('orb-container');
+  const cursor = document.getElementById('abyss-cursor');
+  const svg = document.getElementById('energy-web');
+  let mX = 0, mY = 0;
+
+  const orbs = services.map((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'service-orb';
+    div.innerHTML = `<div class="orb-label">${s.n}</div>`;
+    orbContainer.appendChild(div);
+    
+    // Physical properties
+    return {
+      el: div,
+      x: Math.random() * (container.offsetWidth - 120),
+      y: Math.random() * (container.offsetHeight - 120),
+      vx: (Math.random() - 0.5) * 2,
+      vy: (Math.random() - 0.5) * 2,
+      title: s.n,
+      desc: s.d
+    };
+  });
+
+  container.onmousemove = (e) => {
+    const rect = container.getBoundingClientRect();
+    mX = e.clientX - rect.left;
+    mY = e.clientY - rect.top;
+    cursor.style.left = mX + 'px';
+    cursor.style.top = mY + 'px';
+  };
+
+  function update() {
+    svg.innerHTML = ''; // Clear lines
+    
+    orbs.forEach((orb, i) => {
+      // Mouse interaction (Repulsion)
+      let dx = mX - (orb.x + 60);
+      let dy = mY - (orb.y + 60);
+      let dist = Math.sqrt(dx*dx + dy*dy);
+      
+      if (dist < 200) {
+        orb.vx -= dx * 0.001;
+        orb.vy -= dy * 0.001;
+        // Draw energy line to cursor
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", orb.x + 60); line.setAttribute("y1", orb.y + 60);
+        line.setAttribute("x2", mX); line.setAttribute("y2", mY);
+        line.setAttribute("stroke", `rgba(0, 255, 204, ${1 - dist/200})`);
+        svg.appendChild(line);
+      }
+
+      // Movement
+      orb.x += orb.vx; orb.y += orb.vy;
+      orb.vx *= 0.99; orb.vy *= 0.99; // Friction
+
+      // Boundary Check
+      if (orb.x < 0 || orb.x > container.offsetWidth - 120) orb.vx *= -1;
+      if (orb.y < 0 || orb.y > container.offsetHeight - 120) orb.vy *= -1;
+
+      orb.el.style.transform = `translate(${orb.x}px, ${orb.y}px)`;
+      
+      orb.el.onclick = () => {
+        document.getElementById('m-title').innerText = orb.title;
+        document.getElementById('m-desc').innerText = orb.desc;
+        document.getElementById('abyss-modal').style.display = 'block';
+      };
+    });
+    requestAnimationFrame(update);
+  }
+
+  function closeAbyss() { document.getElementById('abyss-modal').style.display = 'none'; }
+  update();
+</script>

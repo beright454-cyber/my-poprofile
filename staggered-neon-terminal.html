@@ -1,0 +1,152 @@
+<div id="sf-blade-interface">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-black: #020308;
+      --neon-green: #00ff41;
+      --electric-blue: #00d4ff;
+      --glass: rgba(15, 25, 45, 0.7);
+    }
+
+    #sf-blade-interface {
+      width: 100%; height: 800px;
+      background: var(--bg-black);
+      background-image: 
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+      background-size: 100px 100px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; perspective: 1500px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .blade-container {
+      position: relative;
+      width: 1000px; height: 600px;
+      transform: rotateY(-20deg) rotateX(10deg);
+      transform-style: preserve-3d;
+      display: flex; flex-direction: column; gap: 15px;
+    }
+
+    .blade {
+      width: 600px; height: 50px;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border-left: 5px solid var(--electric-blue);
+      display: flex; align-items: center;
+      padding: 0 30px;
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      cursor: pointer;
+      clip-path: polygon(0 0, 95% 0, 100% 100%, 0 100%);
+      transform: translateZ(0);
+    }
+
+    /* Asymmetric Staggering */
+    .blade:nth-child(even) { margin-left: 100px; border-left-color: var(--neon-green); }
+
+    .blade:hover {
+      width: 800px;
+      background: linear-gradient(90deg, rgba(0, 212, 255, 0.2), transparent);
+      border-left-color: #fff;
+      transform: translateZ(100px) translateX(20px);
+      box-shadow: -20px 0 50px rgba(0, 212, 255, 0.2);
+    }
+
+    .b-index { font-weight: 800; color: var(--electric-blue); font-size: 0.7rem; width: 60px; }
+    .blade:hover .b-index { color: #fff; }
+
+    .b-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem; font-weight: 900; color: #fff;
+      text-transform: uppercase; letter-spacing: 2px; flex-grow: 1;
+    }
+
+    .b-status { font-size: 0.6rem; color: rgba(255,255,255,0.4); text-align: right; }
+
+    /* Detail Popup on Hover */
+    .b-desc {
+      position: absolute; left: 820px; width: 0;
+      opacity: 0; color: var(--neon-green); font-size: 0.8rem;
+      transition: all 0.5s; white-space: nowrap; overflow: hidden;
+      border-left: 1px solid var(--neon-green); padding-left: 0;
+    }
+
+    .blade:hover .b-desc { width: 300px; opacity: 1; padding-left: 20px; }
+
+    /* Background Animation */
+    .scan-line {
+      position: absolute; width: 100%; height: 100px;
+      background: linear-gradient(to bottom, transparent, rgba(0, 212, 255, 0.05), transparent);
+      animation: scan 6s infinite linear;
+      pointer-events: none;
+    }
+    @keyframes scan { from { top: -100px; } to { top: 100%; } }
+  </style>
+
+  <div class="scan-line"></div>
+
+  <div class="blade-container">
+    <div class="blade">
+      <div class="b-index">U_21</div>
+      <div class="b-title">CRM Solutions</div>
+      <div class="b-status">SYSTEM_ACTIVE</div>
+      <div class="b-desc">// CUSTOMER_LOGISTICS_MGMT_INITIALIZED</div>
+    </div>
+    <div class="blade">
+      <div class="b-index">U_22</div>
+      <div class="b-title">Data Analysis</div>
+      <div class="b-status">PROCESSING</div>
+      <div class="b-desc">// NEURAL_DATA_MINING_SUCCESSFUL</div>
+    </div>
+    <div class="blade">
+      <div class="b-index">U_23</div>
+      <div class="b-title">Cloud Solutions</div>
+      <div class="b-status">SYNC_OK</div>
+      <div class="b-desc">// GLOBAL_INFRASTRUCTURE_STABLE</div>
+    </div>
+    <div class="blade">
+      <div class="b-index">U_24</div>
+      <div class="b-title">Cybersecurity</div>
+      <div class="b-status">SHIELDED</div>
+      <div class="b-desc">// THREAT_DETECTION_LEVEL_ZERO</div>
+    </div>
+    <div class="blade">
+      <div class="b-index">U_25</div>
+      <div class="b-title">IT Support</div>
+      <div class="b-status">ONLINE</div>
+      <div class="b-desc">// 24/7_INFRASTRUCTURE_MONITORING</div>
+    </div>
+    <div class="blade">
+      <div class="b-index">U_26</div>
+      <div class="b-title">Integration</div>
+      <div class="b-status">LINKED</div>
+      <div class="b-desc">// API_WORKFLOW_BRIDGING_COMPLETE</div>
+    </div>
+    <div class="blade">
+      <div class="b-index">U_27</div>
+      <div class="b-title">Automation</div>
+      <div class="b-status">OPTIMAL</div>
+      <div class="b-desc">// ROBOTIC_PROCESS_LOGIC_ACTIVE</div>
+    </div>
+    <div class="blade">
+      <div class="b-index">U_28</div>
+      <div class="b-title">Project Mgmt</div>
+      <div class="b-status">DEPLOYED</div>
+      <div class="b-desc">// FULL_CYCLE_OPERATIONS_RUNNING</div>
+    </div>
+    <div class="blade">
+      <div class="b-index">U_29</div>
+      <div class="b-title">Quality Assurance</div>
+      <div class="b-status">VERIFIED</div>
+      <div class="b-desc">// ERROR_RATE_APPROX_0.0001%</div>
+    </div>
+    <div class="blade">
+      <div class="b-index">U_30</div>
+      <div class="b-title">Maintenance</div>
+      <div class="b-status">STABLE</div>
+      <div class="b-desc">// CONTINUOUS_INTEGRITY_CHECK_PASS</div>
+    </div>
+  </div>
+</div>

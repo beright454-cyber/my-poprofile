@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700;800&family=Michroma&family=Space+Mono:wght@700&display=swap');
+
+    :root {
+        --luxury-gold: #D4AF37;
+        --off-gold: #C5A059;
+        --off-brown: #3C2A21;
+        --deep-espresso: #1A120B;
+    }
+
+    body, html { margin: 0; padding: 0; height: 100%; background: #0a0a0a; overflow: hidden; font-family: 'Michroma', sans-serif; }
+
+    #particle-canvas {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, var(--off-brown) 0%, #000 100%);
+    }
+
+    .main-frame {
+        position: relative;
+        z-index: 10;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        perspective: 2000px;
+    }
+
+    /* LUXURY GLASS CARD */
+    .master-card {
+        background: rgba(26, 18, 11, 0.85);
+        backdrop-filter: blur(25px);
+        border: 1px solid var(--luxury-gold);
+        padding: 60px 80px;
+        border-radius: 4px;
+        text-align: center;
+        transform-style: preserve-3d;
+        box-shadow: 0 50px 100px rgba(0,0,0,0.8), inset 0 0 30px rgba(212, 175, 55, 0.05);
+        transition: transform 0.1s ease-out;
+    }
+
+    .name-text {
+        color: var(--off-gold);
+        font-size: 0.9rem;
+        letter-spacing: 14px;
+        opacity: 0.8;
+        margin-bottom: 30px;
+        font-weight: 300;
+        text-transform: uppercase;
+    }
+
+    /* BOLD LUXURY TYPOGRAPHY */
+    .bold-title {
+        font-family: 'Syncopate', sans-serif;
+        font-weight: 800;
+        display: block;
+        margin: 5px 0;
+        line-height: 1.1;
+    }
+
+    .sand-blaster {
+        color: #fff;
+        font-size: clamp(1.8rem, 6vw, 3.8rem);
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        letter-spacing: -1px;
+    }
+
+    .ai-dev {
+        color: var(--luxury-gold);
+        font-size: clamp(1.8rem, 6vw, 4rem);
+        text-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        letter-spacing: -1px;
+    }
+
+    /* SEPARATOR LINE */
+    .system-status {
+        width: 100%;
+        height: 1px;
+        background: rgba(212, 175, 55, 0.2);
+        margin: 40px 0;
+        position: relative;
+    }
+
+    .progress-fill {
+        position: absolute;
+        height: 2px;
+        width: 0%;
+        top: -0.5px;
+        background: var(--luxury-gold);
+        box-shadow: 0 0 15px var(--luxury-gold);
+        animation: fill 4s cubic-bezier(0.1, 0.5, 0.5, 1) forwards;
+    }
+
+    @keyframes fill { to { width: 100%; } }
+
+    /* MASTER BUTTON */
+    .launch-btn {
+        margin-top: 20px;
+        padding: 20px 60px;
+        background: transparent;
+        border: 1px solid var(--luxury-gold);
+        color: var(--luxury-gold);
+        font-family: 'Space Mono', monospace;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 6px;
+        cursor: pointer;
+        transition: 0.5s;
+    }
+
+    .launch-btn:hover {
+        background: var(--luxury-gold);
+        color: var(--deep-espresso);
+        box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+        letter-spacing: 10px;
+    }
+
+</style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<div class="main-frame">
+    <div class="master-card" id="card">
+        <div class="name-text">SUBRATA MONDAL</div>
+        
+        <span class="bold-title sand-blaster">SAND BLASTER</span>
+        <div style="color: var(--off-gold); font-size: 0.8rem; margin: 15px 0; opacity: 0.5;">& PROFESSIONAL CRAFTSMAN</div>
+        <span class="bold-title ai-dev">AI WEB DEVELOPER</span>
+
+        <div class="system-status"><div class="progress-fill"></div></div>
+
+        <div id="status" style="font-family:'Space Mono'; color:var(--off-gold); font-size: 0.6rem; letter-spacing: 4px;">
+            STABILIZING MOLECULAR MATRIX...
+        </div>
+
+        <button class="launch-btn">EXPERIENCE MASTER</button>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const mouse = { x: null, y: null, radius: 150 };
+
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+    });
+
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.baseX = this.x;
+            this.baseY = this.y;
+            this.size = Math.random() * 1.5 + 0.5;
+            this.density = (Math.random() * 30) + 1;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(212, 175, 55, 0.4)';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.fill();
+        }
+        update() {
+            let dx = mouse.x - this.x;
+            let dy = mouse.y - this.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            let forceDirectionX = dx / distance;
+            let forceDirectionY = dy / distance;
+            let maxDistance = mouse.radius;
+            let force = (maxDistance - distance) / maxDistance;
+            let directionX = forceDirectionX * force * this.density;
+            let directionY = forceDirectionY * force * this.density;
+
+            if (distance < mouse.radius) {
+                this.x += directionX;
+                this.y += directionY;
+            } else {
+                if (this.x !== this.baseX) {
+                    let dx = this.x - this.baseX;
+                    this.x -= dx / 10;
+                }
+                if (this.y !== this.baseY) {
+                    let dy = this.y - this.baseY;
+                    this.y -= dy / 10;
+                }
+            }
+        }
+    }
+
+    function createParticles() {
+        particles = [];
+        for (let i = 0; i < 250; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].draw();
+            particles[i].update();
+        }
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => { init(); createParticles(); });
+    init(); createParticles(); animate();
+
+    const card = document.getElementById('card');
+    document.addEventListener('mousemove', (e) => {
+        const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
+        const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+        card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    });
+
+    const logs = ["GOLD PURITY: 99.9%","AI LOGIC: OPTIMIZED","SURFACE FINISH: LUXURY","SUBRATA MONDAL: READY"];
+    let i = 0;
+    setInterval(() => {
+        document.getElementById('status').innerText = logs[i];
+        i = (i + 1) % logs.length;
+    }, 2500);
+</script>
+
+</body>
+</html>

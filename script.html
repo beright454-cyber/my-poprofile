@@ -1,0 +1,32 @@
+<script>
+/**
+ * Global API for the Subrata Ecosystem
+ */
+const API = {
+  // Send data to Google Sheets via doPost
+  sendData: async function(nodeType, action, details) {
+    const url = "YOUR_DEPLOYED_WEBAPP_URL"; // Replace after deployment
+    const payload = {
+      nodeType: nodeType,
+      action: action,
+      details: details
+    };
+    
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+      return await response.json();
+    } catch (error) {
+      console.error("Transmission Error:", error);
+    }
+  },
+
+  // UI Helper for the "Experience Master" or "Select Unit" buttons
+  triggerPulse: function(element) {
+    element.style.transform = 'scale(0.95)';
+    setTimeout(() => element.style.transform = 'scale(1)', 100);
+  }
+};
+</script>

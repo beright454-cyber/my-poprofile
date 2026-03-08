@@ -1,0 +1,207 @@
+<div id="sf-galaxy-slow">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@600;800&family=Hind+Siliguri:wght@600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      /* Galaxy Palette */
+      --galaxy-bg: linear-gradient(to right, #050214, #1a0b2e, #000000);
+      --stellar-gold: #ffd700;
+      --nebula-pink: #ff00cc;
+      --cyan-light: #00ffff;
+    }
+
+    #sf-galaxy-slow {
+      width: 100%;
+      height: 600px;
+      overflow: hidden;
+      position: relative;
+      background: var(--galaxy-bg);
+      font-family: 'Exo 2', sans-serif;
+      perspective: 1500px;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Stars Background */
+    #sf-galaxy-slow::before {
+      content: "";
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background-image: 
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px);
+      background-size: 550px 550px, 350px 350px;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* Controls */
+    .g-controls {
+      position: absolute;
+      bottom: 25px; right: 25px;
+      z-index: 100;
+      display: flex;
+      background: #000000;
+      border: 2px solid var(--stellar-gold);
+      border-radius: 4px;
+      box-shadow: 0 0 10px var(--stellar-gold);
+    }
+
+    .g-btn {
+      color: white; background: none; border: none; padding: 12px 20px;
+      cursor: pointer; font-family: 'Orbitron', sans-serif; 
+      font-size: 0.9rem; font-weight: 900;
+      transition: 0.4s; letter-spacing: 1px;
+    }
+    .g-btn.active { background: var(--stellar-gold); color: black; }
+
+    /* The Engine Scroll - SLOWED DOWN HERE */
+    .g-engine {
+      display: flex; 
+      flex-direction: row;
+      gap: 50px;
+      height: 100%;
+      width: max-content;
+      align-items: center; 
+      padding: 0 50px;
+      /* CHANGED FROM 80s TO 200s */
+      animation: gScrollSide 200s linear infinite; 
+      transform-style: preserve-3d;
+    }
+
+    @keyframes gScrollSide {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    #sf-galaxy-slow:hover .g-engine { animation-play-state: paused; }
+
+    /* The Galaxy Card */
+    .g-prism {
+      position: relative; 
+      width: 500px;
+      height: 300px;
+      flex-shrink: 0;
+      transform-style: preserve-3d;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      background: rgba(10, 5, 20, 0.98); 
+      border: 2px solid rgba(255, 97, 216, 0.5);
+      box-shadow: 0 20px 50px rgba(0,0,0,1);
+      transition: 0.4s;
+      transform: rotateY(15deg);
+    }
+
+    .g-prism:hover { 
+      transform: rotateY(0deg) scale(1.05) translateZ(10px); 
+      border-color: var(--cyan-light);
+      box-shadow: 0 0 40px rgba(0, 242, 255, 0.4);
+      z-index: 50;
+    }
+
+    .g-img-side {
+      height: 100%; width: 100%;
+      overflow: hidden;
+      border-right: 3px solid var(--nebula-pink);
+    }
+
+    .g-img-side img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: saturate(0.8) brightness(0.9);
+      transition: 0.8s;
+    }
+
+    .g-prism:hover .g-img-side img { filter: saturate(1.2) brightness(1.2); }
+
+    .g-content { padding: 30px; display: flex; flex-direction: column; justify-content: center; }
+
+    /* TEXT STYLES */
+    .g-id { 
+        color: var(--stellar-gold); 
+        font-family: 'Orbitron', sans-serif; 
+        font-size: 0.8rem; 
+        font-weight: 900; 
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 0px black; 
+    }
+
+    .g-name { 
+        font-family: 'Orbitron', sans-serif; 
+        font-size: 1.6rem; 
+        margin: 10px 0; 
+        color: white; 
+        font-weight: 900; 
+        text-shadow: 3px 3px 0px black;
+        text-transform: uppercase;
+        line-height: 1.1;
+    }
+
+    .g-text { 
+        color: #ffffff; 
+        font-size: 1rem; 
+        line-height: 1.4; 
+        font-weight: 700; 
+        text-shadow: 2px 2px 4px #000000; 
+    }
+
+    .bn-font .g-name, .bn-font .g-text { font-family: 'Hind Siliguri', sans-serif; }
+  </style>
+
+  <div class="g-controls">
+    <button id="en" class="g-btn active" onclick="setL('en')">EN</button>
+    <button id="bn" class="g-btn" onclick="setL('bn')">BD</button>
+    <button id="pl" class="g-btn" onclick="setL('pl')">PL</button>
+  </div>
+
+  <div class="g-engine" id="g-grid"></div>
+</div>
+
+<script>
+  const botItems = [
+    { id: "01", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=400", en: ["DocuHelper", "Links to specific Google Drive documents automatically."], bn: ["ডকু-হেল্পার", "অনুরোধে ড্রাইভ ডকুমেন্টের লিঙ্ক প্রদান করে।"], pl: ["DocuHelper", "Linki do dokumentów Google Drive."] },
+    { id: "02", img: "https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?auto=format&fit=crop&w=400", en: ["FAQ-Flow", "Instantly answers questions from a pre-set list."], bn: ["এফএকিউ-ফ্লো", "প্রশ্নের তাৎক্ষণিক উত্তর দেয়।"], pl: ["FAQ-Flow", "Błyskawiczne odpowiedzi na pytania."] },
+    { id: "03", img: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400", en: ["LeadZap", "Saves customer contact details into Google Sheets."], bn: ["লিড-জ্যাপ", "গ্রাহকের তথ্য গুগল শিটে সংরক্ষণ করে।"], pl: ["LeadZap", "Zbiera dane do Arkuszy Google."] },
+    { id: "04", img: "https://images.unsplash.com/photo-1537420327992-d6e192287183?auto=format&fit=crop&w=400", en: ["HR-Buddy", "Finds company policies and holiday calendars."], bn: ["এইচআর-বাডি", "নীতিমালা ও ছুটির ক্যালেন্ডার খুঁজে দেয়।"], pl: ["HR-Buddy", "Polityka firmy i kalendarze."] },
+    { id: "05", img: "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=400", en: ["BookIt", "Checks spreadsheet dates and logs appointments."], bn: ["বুক-ইট", "অ্যাপয়েন্টমেন্ট সরাসরি শিটে লগ করে।"], pl: ["BookIt", "Zapisuje wizyty w arkuszu."] },
+    { id: "06", img: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=400", en: ["QuizMaster", "Educational tool with Sheet score tracking."], bn: ["কুইজ-মাস্টার", "শিক্ষা এবং স্কোর ট্র্যাকিং টুল।"], pl: ["QuizMaster", "Testy i śledzenie wyników."] },
+    { id: "07", img: "https://images.unsplash.com/photo-1484589065579-248aad0d8b13?auto=format&fit=crop&w=400", en: ["TixBot", "Logs support issues as tickets in your Sheet."], bn: ["টিক্স-বট", "কারিগরি সমস্যা টিকেট হিসেবে লগ করে।"], pl: ["TixBot", "Obsługa zgłoszeń technicznych."] },
+    { id: "08", img: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=400", en: ["PropScout", "Shows property details and prices."], bn: ["প্রপ-স্কাউট", "সম্পত্তির বিবরণ ও দাম প্রদর্শন করে।"], pl: ["PropScout", "Szczegóły nieruchomości i ceny."] },
+    { id: "09", img: "https://images.unsplash.com/photo-1506318137071-a8bcbf6755dd?auto=format&fit=crop&w=400", en: ["EventGuide", "Provides event schedules and speaker bios."], bn: ["ইভেন্ট-গাইড", "সময়সূচী এবং স্পিকারের প্রোফাইল দেয়।"], pl: ["EventGuide", "Harmonogramy i biogramy."] },
+    { id: "10", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=400", en: ["FeedbackLoop", "Records user reviews for satisfaction analysis."], bn: ["ফিডব্যাক-লুপ", "সন্তুষ্টি বিশ্লেষণের জন্য রেটিং নেয়।"], pl: ["FeedbackLoop", "Analiza opinii klientów."] },
+    { id: "11", img: "https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?auto=format&fit=crop&w=400", en: ["MenuMinder", "Displays daily food specials and pricing."], bn: ["মেনু-মাইন্ডার", "দৈনিক বিশেষ খাবার ও দাম দেখায়।"], pl: ["MenuMinder", "Wyświetla specjały dnia."] },
+    { id: "12", img: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400", en: ["StudySync", "Assistant for lecture links and deadlines."], bn: ["স্টাডি-সিঙ্ক", "লেকচার লিঙ্ক ও ডেডলাইনের জন্য সহকারী।"], pl: ["StudySync", "Linki do wykładów i terminy."] },
+    { id: "13", img: "https://images.unsplash.com/photo-1537420327992-d6e192287183?auto=format&fit=crop&w=400", en: ["FitTrack", "Records workout data in a fitness log Sheet."], bn: ["ফিট-ট্র্যাক", "দৈনন্দিন ওয়ার্কআউট ডেটা রেকর্ড করে।"], pl: ["FitTrack", "Dziennik treningowy."] },
+    { id: "14", img: "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=400", en: ["PricePulse", "Inventory checker for stock and pricing."], bn: ["প্রাইস-পালস", "স্টক এবং দামের জন্য চেকার।"], pl: ["PricePulse", "Stan magazynu i ceny."] },
+    { id: "15", img: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=400", en: ["RSVP-Rover", "Manages guest lists and attendance."], bn: ["আরএসভিপি-রোভার", "অতিথি তালিকা ও উপস্থিতি দেখে।"], pl: ["RSVP-Rover", "Zarządza listą gości."] },
+    { id: "16", img: "https://images.unsplash.com/photo-1484589065579-248aad0d8b13?auto=format&fit=crop&w=400", en: ["MediCheck", "Provides clinic hours and doctor availability."], bn: ["মেডি-চেক", "ক্লিনিকের সময় ও ডাক্তারের তথ্য দেয়।"], pl: ["MediCheck", "Dostępność lekarzy i godziny."] },
+    { id: "17", img: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=400", en: ["BillBot", "Tracks shared expenses in a budget Sheet."], bn: ["বিল-বট", "অংশীদারি খরচ ট্র্যাক ও শ্রেণীবদ্ধ করে।"], pl: ["BillBot", "Śledzenie wspólnych wydatków."] },
+    { id: "18", img: "https://images.unsplash.com/photo-1506318137071-a8bcbf6755dd?auto=format&fit=crop&w=400", en: ["JobLink", "Links to current career opportunities."], bn: ["জব-লিঙ্ক", "ক্যারিয়ারের সুযোগের লিঙ্ক দেয়।"], pl: ["JobLink", "Oferty pracy i aplikacje."] },
+    { id: "19", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=400", en: ["VibeCheck", "Anonymously logs team mood and workload."], bn: ["ভাইব-চেক", "টিমের মেজাজ এবং কাজের চাপ লগ করে।"], pl: ["VibeCheck", "Log nastroju zespołu."] },
+    { id: "20", img: "https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?auto=format&fit=crop&w=400", en: ["TravelTracer", "Enter ID to see shipping status."], bn: ["ট্রাভেল-ট্রেসার", "শিপিং স্ট্যাটাস দেখতে আইডি দিন।"], pl: ["TravelTracer", "Status przesyłki z arkusza."] }
+  ];
+
+  let activeL = 'en';
+  function draw() {
+    const isBn = activeL === 'bn';
+    const html = botItems.map(b => `
+      <div class="g-prism ${isBn ? 'bn-font' : ''}">
+        <div class="g-img-side">
+          <img src="${b.img}" alt="${b.en[0]}">
+        </div>
+        <div class="g-content">
+          <div class="g-id">NODE ${b.id}</div>
+          <div class="g-name">${activeL === 'en' ? b.en[0] : (activeL === 'pl' ? b.pl[0] : b.bn[0])}</div>
+          <div class="g-text">${activeL === 'en' ? b.en[1] : (activeL === 'pl' ? b.pl[1] : b.bn[1])}</div>
+        </div>
+      </div>
+    `).join('');
+    document.getElementById('g-grid').innerHTML = html + html;
+  }
+
+  function setL(l) {
+    activeL = l;
+    document.querySelectorAll('.g-btn').forEach(b => b.classList.toggle('active', b.id === l));
+    draw();
+  }
+  draw();
+</script>

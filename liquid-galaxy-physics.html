@@ -1,0 +1,283 @@
+<div id="liquid-galaxy-container">
+  <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --neon-lime: #ccff00;
+      --deep-space: #0a0a0c;
+      --card-edge: rgba(204, 255, 0, 0.2);
+    }
+
+    #liquid-galaxy-container {
+      width: 100%;
+      height: 850px;
+      background: var(--deep-space);
+      background-image: 
+        radial-gradient(circle at 2px 2px, rgba(204, 255, 0, 0.05) 1px, transparent 0);
+      background-size: 40px 40px;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      touch-action: none;
+    }
+
+    /* Decorative blurred glow in background */
+    .bg-glow {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(204, 255, 0, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .galaxy-card {
+      position: absolute;
+      width: 180px;
+      height: 100px;
+      background: rgba(15, 15, 18, 0.9);
+      border: 1px solid var(--card-edge);
+      border-radius: 4px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s;
+      z-index: 2;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .galaxy-card:hover {
+      border-color: var(--neon-lime);
+      box-shadow: 0 0 20px rgba(204, 255, 0, 0.2);
+      z-index: 100 !important;
+    }
+
+    .g-key {
+      font-family: 'Syncopate', sans-serif;
+      font-size: 8px;
+      color: var(--neon-lime);
+      letter-spacing: 1px;
+    }
+
+    .g-name {
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      line-height: 1.2;
+      margin-top: 5px;
+    }
+
+    /* Details Modal */
+    #galaxy-modal {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 5, 5, 0.95);
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: #111;
+      border: 1px solid var(--neon-lime);
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 0 50px rgba(204, 255, 0, 0.1);
+    }
+
+    .modal-content h2 {
+      font-family: 'Syncopate', sans-serif;
+      color: var(--neon-lime);
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+    }
+
+    .modal-content p {
+      color: #ccc;
+      line-height: 1.6;
+      font-size: 1.1rem;
+    }
+
+    .close-galaxy {
+      margin-top: 25px;
+      background: var(--neon-lime);
+      color: #000;
+      border: none;
+      padding: 12px 30px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+  </style>
+
+  <div id="space-station" style="width: 100%; height: 100%;"></div>
+
+  <div id="galaxy-modal">
+    <div class="modal-content">
+      <div class="g-key" id="v-key"></div>
+      <h2 id="v-title"></h2>
+      <p id="v-desc"></p>
+      <button class="close-galaxy" onclick="closeGalaxy()">Return to Station</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const fullServices = [
+    { kw: "SRV_01", title: "Business Consultation", desc: "Professional guidance to help identify challenges and create effective solutions." },
+    { kw: "SRV_02", title: "Strategic Planning", desc: "Structured planning to achieve long-term business growth and stability." },
+    { kw: "SRV_03", title: "Market Research", desc: "In-depth research to understand market trends, customer needs, and competitors." },
+    { kw: "SRV_04", title: "Brand Development", desc: "Building strong brand identity, values, and market positioning." },
+    { kw: "SRV_05", title: "Logo Design", desc: "Creative logo designs that represent your brand vision and identity." },
+    { kw: "SRV_06", title: "Graphic Design", desc: "Professional visual designs for digital and print media." },
+    { kw: "SRV_07", title: "Website Design", desc: "Modern, responsive, and user-friendly website designs." },
+    { kw: "SRV_08", title: "Website Development", desc: "High-quality website development using modern technologies." },
+    { kw: "SRV_09", title: "Mobile App Development", desc: "Custom mobile applications for Android and iOS platforms." },
+    { kw: "SRV_10", title: "Software Development", desc: "Tailored software solutions for business automation and growth." },
+    { kw: "SRV_11", title: "E-commerce Solutions", desc: "Complete online store setup and management services." },
+    { kw: "SRV_12", title: "UI/UX Design", desc: "User-focused interface and experience design for better engagement." },
+    { kw: "SRV_13", title: "Content Writing", desc: "Professional content for websites, blogs, and marketing materials." },
+    { kw: "SRV_14", title: "Copywriting", desc: "Persuasive content to increase sales and customer conversions." },
+    { kw: "SRV_15", title: "SEO Services", desc: "Search engine optimization to improve website ranking and visibility." },
+    { kw: "SRV_16", title: "Social Media Management", desc: "Managing social platforms to grow audience and engagement." },
+    { kw: "SRV_17", title: "Digital Marketing", desc: "Complete online marketing solutions for business growth." },
+    { kw: "SRV_18", title: "Email Marketing", desc: "Targeted email campaigns to reach and retain customers." },
+    { kw: "SRV_19", title: "PPC Advertising", desc: "Paid advertising campaigns for fast traffic and conversions." },
+    { kw: "SRV_20", title: "Lead Generation", desc: "Systems and strategies to generate quality business leads." },
+    { kw: "SRV_21", title: "CRM Solutions", desc: "Customer relationship management system setup and support." },
+    { kw: "SRV_22", title: "Data Analysis", desc: "Business data analysis for better decision-making." },
+    { kw: "SRV_23", title: "Cloud Solutions", desc: "Cloud storage, hosting, and system management services." },
+    { kw: "SRV_24", title: "Cybersecurity Services", desc: "Protection of systems, data, and networks from threats." },
+    { kw: "SRV_25", title: "IT Support Services", desc: "Technical support and IT system management." },
+    { kw: "SRV_26", title: "System Integration", desc: "Integration of different systems into one efficient workflow." },
+    { kw: "SRV_27", title: "Automation Solutions", desc: "Business process automation for efficiency and productivity." },
+    { kw: "SRV_28", title: "Project Management", desc: "Professional management of projects from start to finish." },
+    { kw: "SRV_29", title: "Quality Assurance", desc: "Testing and quality control to ensure high standards." },
+    { kw: "SRV_30", title: "Maintenance Services", desc: "Regular system and service maintenance support." },
+    { kw: "SRV_31", title: "Technical Training", desc: "Training programs for technical tools and systems." },
+    { kw: "SRV_32", title: "Business Training", desc: "Skill development and business knowledge training." },
+    { kw: "SRV_33", title: "Customer Support Services", desc: "Dedicated support for customer satisfaction." },
+    { kw: "SRV_34", title: "Call Center Services", desc: "Inbound and outbound customer communication services." },
+    { kw: "SRV_35", title: "Virtual Assistance", desc: "Remote administrative and business support services." },
+    { kw: "SRV_36", title: "Documentation Services", desc: "Professional business and technical documentation." },
+    { kw: "SRV_37", title: "Legal Documentation Support", desc: "Assistance in preparing business-related documents." },
+    { kw: "SRV_38", title: "Accounting Services", desc: "Financial management, bookkeeping, and reporting." },
+    { kw: "SRV_39", title: "Tax Consultancy", desc: "Tax planning and compliance support services." },
+    { kw: "SRV_40", title: "Financial Advisory", desc: "Expert financial planning and advisory services." },
+    { kw: "SRV_41", title: "HR Services", desc: "Human resource management and recruitment support." },
+    { kw: "SRV_42", title: "Recruitment Services", desc: "Hiring and talent acquisition solutions." },
+    { kw: "SRV_43", title: "Payroll Management", desc: "Employee salary and payroll processing services." },
+    { kw: "SRV_44", title: "Compliance Management", desc: "Business regulatory and compliance support." },
+    { kw: "SRV_45", title: "Risk Management", desc: "Identifying and managing business risks." },
+    { kw: "SRV_46", title: "Operations Management", desc: "Optimizing daily business operations." },
+    { kw: "SRV_47", title: "Supply Chain Management", desc: "Efficient supply and logistics solutions." },
+    { kw: "SRV_48", title: "Inventory Management", desc: "Stock tracking and inventory optimization." },
+    { kw: "SRV_49", title: "Procurement Services", desc: "Professional sourcing and purchasing services." },
+    { kw: "SRV_50", title: "Logistics Support", desc: "Transportation and delivery coordination services." },
+    { kw: "SRV_51", title: "Facility Management", desc: "Building and infrastructure management services." },
+    { kw: "SRV_52", title: "Maintenance Operations", desc: "Operational maintenance and repair services." },
+    { kw: "SRV_53", title: "Event Management", desc: "Planning and execution of corporate and business events." },
+    { kw: "SRV_54", title: "Public Relations", desc: "Brand image management and media communication." },
+    { kw: "SRV_55", title: "Media Production", desc: "Photo, video, and digital media creation services." },
+    { kw: "SRV_56", title: "Advertising Services", desc: "Brand promotion through online and offline channels." },
+    { kw: "SRV_57", title: "Printing Services", desc: "Professional printing for business materials." },
+    { kw: "SRV_58", title: "Packaging Design", desc: "Creative and functional product packaging solutions." },
+    { kw: "SRV_59", title: "Product Development", desc: "From idea to launch product development services." },
+    { kw: "SRV_60", title: "Business Expansion Consulting", desc: "Support for scaling, growth, and market expansion." }
+  ];
+
+  const station = document.getElementById('space-station');
+  const items = [];
+  let isDragging = false;
+
+  function initGalaxy() {
+    fullServices.forEach((s, i) => {
+      const card = document.createElement('div');
+      card.className = 'galaxy-card';
+      
+      const state = {
+        x: Math.random() * (window.innerWidth - 200),
+        y: Math.random() * 750,
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6,
+        active: false
+      };
+
+      card.innerHTML = `
+        <div class="g-key">${s.kw}</div>
+        <div class="g-name">${s.title}</div>
+      `;
+
+      card.addEventListener('mousedown', () => { state.active = true; isDragging = true; });
+      card.addEventListener('click', () => { if(!isDragging) openGalaxy(s); });
+      
+      station.appendChild(card);
+      items.push({ el: card, state });
+    });
+
+    // Add background glow orbs
+    for(let i=0; i<3; i++) {
+      const orb = document.createElement('div');
+      orb.className = 'bg-glow';
+      orb.style.left = Math.random() * 100 + '%';
+      orb.style.top = Math.random() * 100 + '%';
+      station.appendChild(orb);
+    }
+
+    requestAnimationFrame(updateGalaxy);
+  }
+
+  function updateGalaxy() {
+    items.forEach(item => {
+      if (!item.state.active) {
+        item.state.x += item.state.vx;
+        item.state.y += item.state.vy;
+
+        // Bounce logic with padding
+        if (item.state.x < 10 || item.state.x > station.offsetWidth - 190) item.state.vx *= -1;
+        if (item.state.y < 10 || item.state.y > station.offsetHeight - 110) item.state.vy *= -1;
+
+        item.el.style.transform = `translate(${item.state.x}px, ${item.state.y}px)`;
+      }
+    });
+    requestAnimationFrame(updateGalaxy);
+  }
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    items.forEach(item => {
+      if (item.state.active) {
+        const rect = station.getBoundingClientRect();
+        item.state.x = e.clientX - rect.left - 90;
+        item.state.y = e.clientY - rect.top - 50;
+        item.el.style.transform = `translate(${item.state.x}px, ${item.state.y}px)`;
+      }
+    });
+  });
+
+  window.addEventListener('mouseup', () => {
+    setTimeout(() => isDragging = false, 50);
+    items.forEach(item => item.state.active = false);
+  });
+
+  function openGalaxy(s) {
+    document.getElementById('v-key').innerText = s.kw;
+    document.getElementById('v-title').innerText = s.title;
+    document.getElementById('v-desc').innerText = s.desc;
+    document.getElementById('galaxy-modal').style.display = 'flex';
+  }
+
+  function closeGalaxy() {
+    document.getElementById('galaxy-modal').style.display = 'none';
+  }
+
+  initGalaxy();
+</script>

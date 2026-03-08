@@ -1,0 +1,139 @@
+<div id="sf-nebula-dimension">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --nebula-iris: #6366f1; /* Soft Electric Indigo */
+      --nebula-chrome: #94a3b8; /* Professional Slate Chrome */
+      --deep-space: #020205;
+    }
+
+    #sf-nebula-dimension {
+      width: 100%; height: 850px;
+      background: var(--deep-space);
+      display: flex; align-items: center; justify-content: center;
+      perspective: 3000px; overflow: hidden;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: crosshair;
+    }
+
+    /* THE HYPER-MANIFOLD */
+    .manifold-core {
+      position: relative; width: 500px; height: 500px;
+      transform-style: preserve-3d;
+      /* ULTRA SLOW ROTATION */
+      animation: drift 60s infinite linear;
+    }
+
+    @keyframes drift {
+      0% { transform: rotateX(10deg) rotateY(0deg) rotateZ(0deg); }
+      100% { transform: rotateX(10deg) rotateY(360deg) rotateZ(360deg); }
+    }
+
+    /* THE 16D PLATES */
+    .n-plate {
+      position: absolute; width: 320px; height: 110px;
+      background: rgba(99, 102, 241, 0.03);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      backdrop-filter: blur(15px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+      cursor: pointer;
+      box-shadow: 0 0 40px rgba(0,0,0,0.5);
+    }
+
+    /* DIMENSIONAL POSITIONING (16D Simulation) */
+    .n-plate:nth-child(1) { transform: rotateY(0deg)   translateZ(450px) rotateX(10deg); }
+    .n-plate:nth-child(2) { transform: rotateY(36deg)  translateZ(450px) rotateX(-20deg); }
+    .n-plate:nth-child(3) { transform: rotateY(72deg)  translateZ(450px) rotateZ(15deg); }
+    .n-plate:nth-child(4) { transform: rotateY(108deg) translateZ(450px) rotateY(10deg); }
+    .n-plate:nth-child(5) { transform: rotateY(144deg) translateZ(450px) rotateX(40deg); }
+    .n-plate:nth-child(6) { transform: rotateY(180deg) translateZ(450px) rotateZ(-10deg); }
+    .n-plate:nth-child(7) { transform: rotateY(216deg) translateZ(450px) rotateX(-40deg); }
+    .n-plate:nth-child(8) { transform: rotateY(252deg) translateZ(450px) rotateY(-15deg); }
+    .n-plate:nth-child(9) { transform: rotateY(288deg) translateZ(450px) rotateX(20deg); }
+    .n-plate:nth-child(10) { transform: rotateY(324deg) translateZ(450px) rotateZ(45deg); }
+
+    .n-plate:hover {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: var(--nebula-iris);
+      box-shadow: 0 0 60px var(--nebula-iris);
+      transform: scale(1.5) translateZ(600px) rotateX(0deg) !important;
+      z-index: 5000;
+    }
+
+    .n-id { font-size: 0.65rem; color: var(--nebula-iris); font-weight: 800; letter-spacing: 3px; }
+    .n-title { 
+      font-family: 'Orbitron'; font-size: 1.1rem; color: #fff; 
+      font-weight: 900; text-transform: uppercase; margin-top: 8px;
+    }
+
+    /* MODAL */
+    #nebula-modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(2, 2, 5, 0.98); z-index: 10000;
+      align-items: center; justify-content: center; backdrop-filter: blur(20px);
+    }
+    .modal-core {
+      border: 1px solid var(--nebula-iris); padding: 60px;
+      text-align: left; max-width: 500px; background: #000;
+      position: relative;
+    }
+    .modal-core::before { content: "DATA_STREAMS_ACTIVE"; position: absolute; top: -10px; left: 20px; background: var(--nebula-iris); color: #000; padding: 2px 10px; font-size: 10px; font-weight: 900; }
+    .modal-core h2 { font-family: 'Orbitron'; color: #fff; font-size: 2rem; margin-bottom: 20px; }
+    .modal-core p { color: var(--nebula-chrome); line-height: 1.8; font-size: 1.05rem; }
+    .close-n { margin-top: 30px; background: transparent; border: 1px solid var(--nebula-iris); color: var(--nebula-iris); padding: 12px 40px; font-weight: 900; cursor: pointer; }
+    .close-n:hover { background: var(--nebula-iris); color: #000; }
+  </style>
+
+  <div class="manifold-core" id="manifold">
+    </div>
+
+  <div id="nebula-modal">
+    <div class="modal-core">
+      <h2 id="m-title"></h2>
+      <p id="m-desc"></p>
+      <button class="close-n" onclick="closeN()">STABILIZE_CORE</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const services = [
+    { n: "HR Services", d: "Professional human resource management and recruitment support for elite organizations.", id: "41" },
+    { n: "Recruitment", d: "Strategic hiring and talent acquisition solutions powered by predictive data.", id: "42" },
+    { n: "Payroll Mgmt", d: "Secure employee salary and multi-layered payroll processing services.", id: "43" },
+    { n: "Compliance", d: "Global business regulatory and legal compliance monitoring support.", id: "44" },
+    { n: "Risk Mgmt", d: "Identifying, assessing, and neutralizing critical business risks.", id: "45" },
+    { n: "Operations", d: "Optimizing high-frequency business operations through neural efficiency.", id: "46" },
+    { n: "Supply Chain", d: "Hyper-efficient global supply and logistics network solutions.", id: "47" },
+    { n: "Inventory", d: "Real-time stock tracking and automated inventory optimization systems.", id: "48" },
+    { n: "Procurement", d: "Intelligent professional sourcing and strategic purchasing services.", id: "49" },
+    { n: "Logistics", d: "Transportation, distribution, and global delivery coordination services.", id: "50" }
+  ];
+
+  const manifold = document.getElementById('manifold');
+  
+  services.forEach((s, i) => {
+    const plate = document.createElement('div');
+    plate.className = 'n-plate';
+    plate.onclick = () => openN(s.n, s.d);
+    plate.innerHTML = `
+      <div class="n-id">HYPER_NODE_0${s.id}</div>
+      <div class="n-title">${s.n}</div>
+    `;
+    manifold.appendChild(plate);
+  });
+
+  function openN(t, d) {
+    document.getElementById('m-title').innerText = t;
+    document.getElementById('m-desc').innerText = d;
+    document.getElementById('nebula-modal').style.display = 'flex';
+    manifold.style.animationPlayState = 'paused';
+  }
+
+  function closeN() {
+    document.getElementById('nebula-modal').style.display = 'none';
+    manifold.style.animationPlayState = 'running';
+  }
+</script>

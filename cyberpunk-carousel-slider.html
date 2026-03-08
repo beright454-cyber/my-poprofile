@@ -1,0 +1,188 @@
+<div id="sf-nexus-compact">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #0a0212;
+      --pink-neon: #ff00ff;
+      --violet-glow: #8a2be2;
+      --card-bg: rgba(20, 5, 40, 0.95);
+      --text: #ffffff;
+    }
+
+    #sf-nexus-compact {
+      width: 100%;
+      height: 500px; /* Reduced height */
+      background: radial-gradient(circle, #1a0533 0%, var(--bg-dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      perspective: 1200px; /* Adjusted perspective for smaller scale */
+      font-family: 'Inter', sans-serif;
+    }
+
+    .nexus-stage {
+      position: relative;
+      width: 240px; /* Reduced width */
+      height: 320px; /* Reduced height */
+      transform-style: preserve-3d;
+      animation: nexusRotate 50s linear infinite;
+    }
+
+    @keyframes nexusRotate {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(-360deg); }
+    }
+
+    #sf-nexus-compact:hover .nexus-stage {
+      animation-play-state: paused;
+    }
+
+    .n-card {
+      position: absolute;
+      width: 240px; /* Smaller cards */
+      height: 320px;
+      background: var(--card-bg);
+      border: 1px solid var(--pink-neon);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      backface-visibility: hidden;
+      box-shadow: 0 0 20px rgba(255, 0, 255, 0.15);
+      overflow: hidden;
+    }
+
+    /* translateZ reduced to 400px to keep the circle tight and on-screen */
+    .n-card:nth-child(1)  { transform: rotateY(0deg) translateZ(400px); }
+    .n-card:nth-child(2)  { transform: rotateY(36deg) translateZ(400px); }
+    .n-card:nth-child(3)  { transform: rotateY(72deg) translateZ(400px); }
+    .n-card:nth-child(4)  { transform: rotateY(108deg) translateZ(400px); }
+    .n-card:nth-child(5)  { transform: rotateY(144deg) translateZ(400px); }
+    .n-card:nth-child(6)  { transform: rotateY(180deg) translateZ(400px); }
+    .n-card:nth-child(7)  { transform: rotateY(216deg) translateZ(400px); }
+    .n-card:nth-child(8)  { transform: rotateY(252deg) translateZ(400px); }
+    .n-card:nth-child(9)  { transform: rotateY(288deg) translateZ(400px); }
+    .n-card:nth-child(10) { transform: rotateY(324deg) translateZ(400px); }
+
+    .n-img { width: 100%; height: 120px; border-bottom: 1px solid var(--pink-neon); }
+    .n-img img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .n-info { 
+      padding: 15px; 
+      flex: 1; 
+      text-align: center;
+      display: flex; 
+      flex-direction: column; 
+      justify-content: space-between;
+    }
+
+    .n-id { font-family: 'JetBrains Mono', monospace; color: var(--pink-neon); font-size: 0.6rem; margin-bottom: 3px; }
+    .n-name { color: var(--text); font-size: 1rem; font-weight: 800; line-height: 1.1; margin-bottom: 5px; }
+    .n-desc { color: #b8a3cc; font-size: 0.75rem; line-height: 1.3; margin-bottom: 10px; }
+
+    .n-btn {
+      display: block;
+      padding: 8px;
+      background: var(--pink-neon);
+      color: white;
+      text-decoration: none;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 4px;
+    }
+  </style>
+
+  <div class="nexus-stage">
+    <div class="n-card">
+      <div class="n-img"><img src="https://images.unsplash.com/photo-1454165833767-027ff33026b6?w=300"></div>
+      <div class="n-info">
+        <div class="n-id">SRV::01</div>
+        <div class="n-name">Consultation</div>
+        <div class="n-desc">Professional guidance to help identify business challenges.</div>
+        <a href="#" class="n-btn">LEARN MORE</a>
+      </div>
+    </div>
+    <div class="n-card">
+      <div class="n-img"><img src="https://images.unsplash.com/photo-1507207611509-af012a3ebaad?w=300"></div>
+      <div class="n-info">
+        <div class="n-id">SRV::02</div>
+        <div class="n-name">Strategy</div>
+        <div class="n-desc">Structured planning for long-term growth.</div>
+        <a href="#" class="n-btn">LEARN MORE</a>
+      </div>
+    </div>
+    <div class="n-card">
+      <div class="n-img"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300"></div>
+      <div class="n-info">
+        <div class="n-id">SRV::03</div>
+        <div class="n-name">Market Research</div>
+        <div class="n-desc">In-depth research on trends and needs.</div>
+        <a href="#" class="n-btn">LEARN MORE</a>
+      </div>
+    </div>
+    <div class="n-card">
+      <div class="n-img"><img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=300"></div>
+      <div class="n-info">
+        <div class="n-id">SRV::04</div>
+        <div class="n-name">Branding</div>
+        <div class="n-desc">Building strong brand identity and values.</div>
+        <a href="#" class="n-btn">LEARN MORE</a>
+      </div>
+    </div>
+    <div class="n-card">
+      <div class="n-img"><img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=300"></div>
+      <div class="n-info">
+        <div class="n-id">SRV::05</div>
+        <div class="n-name">Logo Design</div>
+        <div class="n-desc">Creative logo designs for your brand vision.</div>
+        <a href="#" class="n-btn">LEARN MORE</a>
+      </div>
+    </div>
+    <div class="n-card">
+      <div class="n-img"><img src="https://images.unsplash.com/photo-1572044162444-ad60f128bde2?w=300"></div>
+      <div class="n-info">
+        <div class="n-id">SRV::06</div>
+        <div class="n-name">Graphic Design</div>
+        <div class="n-desc">Visual designs for digital and print media.</div>
+        <a href="#" class="n-btn">LEARN MORE</a>
+      </div>
+    </div>
+    <div class="n-card">
+      <div class="n-img"><img src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=300"></div>
+      <div class="n-info">
+        <div class="n-id">SRV::07</div>
+        <div class="n-name">Website Design</div>
+        <div class="n-desc">Modern and responsive website designs.</div>
+        <a href="#" class="n-btn">LEARN MORE</a>
+      </div>
+    </div>
+    <div class="n-card">
+      <div class="n-img"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=300"></div>
+      <div class="n-info">
+        <div class="n-id">SRV::08</div>
+        <div class="n-name">Web Dev</div>
+        <div class="n-desc">High-quality development using modern tech.</div>
+        <a href="#" class="n-btn">LEARN MORE</a>
+      </div>
+    </div>
+    <div class="n-card">
+      <div class="n-img"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=300"></div>
+      <div class="n-info">
+        <div class="n-id">SRV::09</div>
+        <div class="n-name">App Dev</div>
+        <div class="n-desc">Custom mobile apps for Android and iOS.</div>
+        <a href="#" class="n-btn">LEARN MORE</a>
+      </div>
+    </div>
+    <div class="n-card">
+      <div class="n-img"><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=300"></div>
+      <div class="n-info">
+        <div class="n-id">SRV::10</div>
+        <div class="n-name">Software Dev</div>
+        <div class="n-desc">Tailored solutions for automation and growth.</div>
+        <a href="#" class="n-btn">LEARN MORE</a>
+      </div>
+    </div>
+  </div>
+</div>

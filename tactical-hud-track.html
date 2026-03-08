@@ -1,0 +1,140 @@
+<div id="sf-tactical-hud">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #03040a;
+      --neon-lime: #00ff41;
+      --electric-blue: #00d4ff;
+      --card-bg: rgba(10, 20, 35, 0.95);
+    }
+
+    #sf-tactical-hud {
+      width: 100%; height: 500px;
+      background: var(--bg);
+      background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0, 212, 255, 0.05) 40px);
+      overflow: hidden;
+      font-family: 'JetBrains Mono', monospace;
+      position: relative;
+      display: flex; align-items: center;
+    }
+
+    /* THE HORIZONTAL TRACK */
+    .hud-track {
+      display: flex;
+      gap: 30px;
+      padding: 0 50px;
+      animation: trackSlide 40s linear infinite;
+    }
+
+    @keyframes trackSlide {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    #sf-tactical-hud:hover .hud-track { animation-play-state: paused; }
+
+    /* BOLD TACTICAL CARD STYLE */
+    .t-card {
+      min-width: 300px; height: 180px;
+      background: var(--card-bg);
+      border: 2px solid var(--electric-blue);
+      position: relative;
+      display: flex; flex-direction: column;
+      transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    /* Corner Decorators */
+    .t-card::before {
+      content: "DEPLY_MDL"; position: absolute; top: -10px; left: 10px;
+      background: var(--electric-blue); color: #000;
+      font-size: 8px; font-weight: 900; padding: 2px 8px;
+    }
+
+    .t-card:hover {
+      border-color: var(--neon-lime);
+      transform: scale(1.05) translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0, 255, 65, 0.2);
+    }
+
+    .t-header { padding: 20px; border-bottom: 1px solid rgba(0, 212, 255, 0.2); }
+    .t-id { font-size: 0.7rem; color: var(--neon-lime); font-weight: 800; }
+    .t-title { font-family: 'Orbitron'; font-size: 1.2rem; font-weight: 900; color: #fff; text-transform: uppercase; margin-top: 5px; }
+
+    .t-body { padding: 15px 20px; flex-grow: 1; display: flex; align-items: flex-end; }
+    .t-data { width: 100%; font-size: 0.6rem; color: var(--electric-blue); }
+    
+    .loading-bar { width: 100%; height: 4px; background: rgba(0,0,0,0.5); margin-top: 5px; }
+    .loading-fill { height: 100%; background: var(--neon-lime); width: 0%; animation: loadFill 3s infinite; }
+    @keyframes loadFill { 0% { width: 0%; } 100% { width: 100%; } }
+
+    /* MODAL */
+    #tac-modal {
+      display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(3, 4, 10, 0.98); z-index: 1000;
+      align-items: center; justify-content: center; backdrop-filter: blur(10px);
+    }
+    .modal-box {
+      border: 1px solid var(--neon-lime); padding: 40px; background: #000;
+      max-width: 400px; text-align: left;
+    }
+    .modal-box h2 { font-family: 'Orbitron'; color: var(--neon-lime); font-size: 1.8rem; margin-bottom: 15px; }
+    .modal-box p { color: #fff; font-size: 0.9rem; line-height: 1.6; border-left: 3px solid var(--electric-blue); padding-left: 15px; }
+    .close-btn { margin-top: 20px; background: transparent; border: 1px solid var(--electric-blue); color: var(--electric-blue); padding: 10px 20px; cursor: pointer; font-weight: 900; }
+  </style>
+
+  <div class="hud-track" id="track">
+    </div>
+
+  <div id="tac-modal">
+    <div class="modal-box">
+      <h2 id="m-title"></h2>
+      <p id="m-desc"></p>
+      <button class="close-btn" onclick="closeTac()">DISCONNECT</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const services = [
+    { n: "CRM Solutions", d: "Customer relationship management system setup and support.", id: "21" },
+    { n: "Data Analysis", d: "Business data analysis for better decision-making.", id: "22" },
+    { n: "Cloud Solutions", d: "Cloud storage, hosting, and system management services.", id: "23" },
+    { n: "Cybersecurity", d: "Protection of systems, data, and networks from threats.", id: "24" },
+    { n: "IT Support", d: "Technical support and IT system management.", id: "25" },
+    { n: "Integration", d: "Integration of different systems into one efficient workflow.", id: "26" },
+    { n: "Automation", d: "Business process automation for efficiency and productivity.", id: "27" },
+    { n: "Project Mgmt", d: "Professional management of projects from start to finish.", id: "28" },
+    { n: "Quality Assurance", d: "Testing and quality control to ensure high standards.", id: "29" },
+    { n: "Maintenance", d: "Regular system and service maintenance support.", id: "30" }
+  ];
+
+  function build() {
+    const track = document.getElementById('track');
+    const html = services.map(s => `
+      <div class="t-card" onclick="showTac('${s.n}', '${s.d}')">
+        <div class="t-header">
+          <div class="t-id">UNIT_ID: 0${s.id}</div>
+          <div class="t-title">${s.n}</div>
+        </div>
+        <div class="t-body">
+          <div class="t-data">
+            SYSTEM_STATUS: ACTIVE
+            <div class="loading-bar"><div class="loading-fill"></div></div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    track.innerHTML = html + html;
+  }
+
+  function showTac(t, d) {
+    document.getElementById('m-title').innerText = t;
+    document.getElementById('m-desc').innerText = d;
+    document.getElementById('tac-modal').style.display = 'flex';
+  }
+  function closeTac() { document.getElementById('tac-modal').style.display = 'none'; }
+
+  build();
+</script>

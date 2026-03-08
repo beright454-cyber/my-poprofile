@@ -1,0 +1,185 @@
+<div id="hyper-dimension-viewport">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --q-cyan: #00ffcc;
+      --q-magenta: #ff00ff;
+      --q-void: #000000;
+    }
+
+    #hyper-dimension-viewport {
+      width: 100%; height: 800px;
+      background: var(--q-void);
+      display: flex; align-items: center; justify-content: center;
+      perspective: 1000px; overflow: hidden;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: crosshair;
+    }
+
+    /* THE HYPER-VORTEX (Background) */
+    #vortex-canvas {
+      position: absolute; width: 100%; height: 100%;
+      opacity: 0.3; pointer-events: none;
+    }
+
+    /* THE 16D MANIFOLD CONTAINER */
+    .manifold {
+      position: relative; width: 400px; height: 400px;
+      transform-style: preserve-3d;
+      animation: hyperFloat 20s infinite linear;
+    }
+
+    @keyframes hyperFloat {
+      0% { transform: rotateX(0) rotateY(0) rotateZ(0); }
+      100% { transform: rotateX(360deg) rotateY(720deg) rotateZ(360deg); }
+    }
+
+    /* THE QUANTUM PLATES */
+    .q-plate {
+      position: absolute; width: 300px; height: 100px;
+      background: rgba(0, 255, 204, 0.05);
+      border: 1px solid var(--q-cyan);
+      backdrop-filter: blur(5px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0, 255, 204, 0.1);
+    }
+
+    /* 16D STACKING LOGIC (Using varying Z and rotation to mimic higher dimensions) */
+    .q-plate:nth-child(1) { transform: rotateY(0deg) translateZ(300px); }
+    .q-plate:nth-child(2) { transform: rotateY(72deg) translateZ(300px) rotateX(45deg); }
+    .q-plate:nth-child(3) { transform: rotateY(144deg) translateZ(300px) rotateZ(90deg); }
+    .q-plate:nth-child(4) { transform: rotateY(216deg) translateZ(300px) rotateX(-45deg); }
+    .q-plate:nth-child(5) { transform: rotateY(288deg) translateZ(300px) rotateZ(-90deg); }
+    .q-plate:nth-child(6) { transform: rotateX(90deg) translateZ(300px); }
+    .q-plate:nth-child(7) { transform: rotateX(-90deg) translateZ(300px) rotateY(45deg); }
+    .q-plate:nth-child(8) { transform: rotateZ(180deg) translateZ(300px); }
+    .q-plate:nth-child(9) { transform: rotateY(120deg) translateZ(400px) scale(0.8); }
+    .q-plate:nth-child(10) { transform: rotateY(-120deg) translateZ(400px) scale(0.8); }
+
+    .q-plate:hover {
+      background: var(--q-cyan);
+      box-shadow: 0 0 50px var(--q-cyan);
+      transform: scale(1.4) translateZ(450px) !important;
+      z-index: 1000;
+    }
+
+    .q-id { font-size: 0.6rem; color: var(--q-magenta); font-weight: 900; }
+    .q-plate:hover .q-id { color: #000; }
+
+    .q-title {
+      font-family: 'Orbitron'; font-size: 1.1rem; color: #fff;
+      font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
+    }
+    .q-plate:hover .q-title { color: #000; }
+
+    /* THE DIMENSIONAL COLLAPSE (Modal) */
+    #collapse-modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.98); z-index: 10000;
+      align-items: center; justify-content: center;
+    }
+    .collapse-box {
+      border: 1px solid var(--q-magenta); padding: 60px;
+      text-align: center; max-width: 500px;
+      box-shadow: 0 0 100px var(--q-magenta);
+    }
+    .collapse-box h2 { font-family: 'Orbitron'; color: var(--q-magenta); font-size: 2.5rem; margin-bottom: 20px; }
+    .collapse-box p { color: #fff; font-size: 1.1rem; line-height: 1.6; }
+    .close-q { margin-top: 30px; background: var(--q-cyan); color: #000; border: none; padding: 15px 40px; font-weight: 900; cursor: pointer; }
+  </style>
+
+  <canvas id="vortex-canvas"></canvas>
+
+  <div class="manifold" id="manifold">
+    </div>
+
+  <div id="collapse-modal">
+    <div class="collapse-box">
+      <h2 id="m-title"></h2>
+      <p id="m-desc"></p>
+      <button class="close-q" onclick="closeQ()">COLLAPSE_DIMENSION</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const services = [
+    { n: "HR Services", d: "Human resource management and recruitment support.", id: "41" },
+    { n: "Recruitment", d: "Hiring and talent acquisition solutions.", id: "42" },
+    { n: "Payroll Mgmt", d: "Employee salary and payroll processing services.", id: "43" },
+    { n: "Compliance", d: "Business regulatory and compliance support.", id: "44" },
+    { n: "Risk Mgmt", d: "Identifying and managing business risks.", id: "45" },
+    { n: "Operations", d: "Optimizing daily business operations.", id: "46" },
+    { n: "Supply Chain", d: "Efficient supply and logistics solutions.", id: "47" },
+    { n: "Inventory", d: "Stock tracking and inventory optimization.", id: "48" },
+    { n: "Procurement", d: "Professional sourcing and purchasing services.", id: "49" },
+    { n: "Logistics", d: "Transportation and delivery coordination.", id: "50" }
+  ];
+
+  const manifold = document.getElementById('manifold');
+  services.forEach((s, i) => {
+    const plate = document.createElement('div');
+    plate.className = 'q-plate';
+    plate.onclick = () => openQ(s.n, s.d);
+    plate.innerHTML = `<span class="q-id">DIM_DATA_0${s.id}</span><div class="q-title">${s.n}</div>`;
+    manifold.appendChild(plate);
+  });
+
+  function openQ(t, d) {
+    document.getElementById('m-title').innerText = t;
+    document.getElementById('m-desc').innerText = d;
+    document.getElementById('collapse-modal').style.display = 'flex';
+    manifold.style.animationPlayState = 'paused';
+  }
+
+  function closeQ() {
+    document.getElementById('collapse-modal').style.display = 'none';
+    manifold.style.animationPlayState = 'running';
+  }
+
+  // Background Vortex Particles
+  const canvas = document.getElementById('vortex-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  let particles = [];
+
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2;
+      this.speedX = (Math.random() - 0.5) * 3;
+      this.speedY = (Math.random() - 0.5) * 3;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.size > 0.2) this.size -= 0.01;
+    }
+    draw() {
+      ctx.fillStyle = '#00ffcc';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (particles.length < 100) particles.push(new Particle());
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update();
+      particles[i].draw();
+      if (particles[i].size <= 0.2) {
+        particles.splice(i, 1);
+        i--;
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>

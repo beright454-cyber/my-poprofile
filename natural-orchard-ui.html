@@ -1,0 +1,120 @@
+<div id="sf-natural-orchard">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;600&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --orchard-bg: #fdfdfd;
+      --mint-glass: rgba(200, 240, 230, 0.4);
+      --leaf-border: rgba(45, 90, 80, 0.15);
+      --sage-text: #2d5a50;
+    }
+
+    #sf-natural-orchard {
+      width: 100%; height: 800px;
+      background: var(--orchard-bg);
+      background-image: radial-gradient(#e0ece4 2px, transparent 2px);
+      background-size: 50px 50px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; perspective: 2000px;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    /* THE VINE CHASSIS */
+    .growth-vine {
+      position: relative; width: 400px; height: 600px;
+      transform-style: preserve-3d;
+      animation: gentleSway 15s infinite ease-in-out;
+    }
+
+    @keyframes gentleSway {
+      0%, 100% { transform: rotateY(-5deg) rotateX(5deg); }
+      50% { transform: rotateY(10deg) rotateX(-5deg); }
+    }
+
+    /* THE GLASS LEAF NODES */
+    .leaf-node {
+      position: absolute; width: 280px; height: 90px;
+      background: var(--mint-glass);
+      backdrop-filter: blur(12px);
+      border-radius: 60px 5px 60px 5px; /* Organic Leaf Shape */
+      border: 1px solid var(--leaf-border);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    }
+
+    /* Asymmetric Natural Placement */
+    .leaf-node:nth-child(1)  { transform: translateY(-250px) translateX(-150px) rotateZ(-10deg); }
+    .leaf-node:nth-child(2)  { transform: translateY(-200px) translateX(150px) rotateZ(15deg); }
+    .leaf-node:nth-child(3)  { transform: translateY(-100px) translateX(-180px) rotateZ(-20deg); }
+    .leaf-node:nth-child(4)  { transform: translateY(-50px) translateX(120px) rotateZ(5deg); }
+    .leaf-node:nth-child(5)  { transform: translateY(50px) translateX(-140px) rotateZ(-5deg); }
+    .leaf-node:nth-child(6)  { transform: translateY(100px) translateX(190px) rotateZ(20deg); }
+    .leaf-node:nth-child(7)  { transform: translateY(200px) translateX(-100px) rotateZ(-15deg); }
+    .leaf-node:nth-child(8)  { transform: translateY(250px) translateX(160px) rotateZ(10deg); }
+    .leaf-node:nth-child(9)  { transform: translateY(320px) translateX(-200px) rotateZ(-25deg); }
+    .leaf-node:nth-child(10) { transform: translateY(350px) translateX(50px) rotateZ(0deg); }
+
+    .leaf-node:hover {
+      background: #fff;
+      border-color: var(--sage-text);
+      transform: scale(1.2) translateZ(150px) !important;
+      z-index: 100;
+      box-shadow: 0 20px 40px rgba(45, 90, 80, 0.1);
+    }
+
+    .l-id { font-size: 0.6rem; font-weight: 600; color: var(--sage-text); opacity: 0.5; letter-spacing: 2px; }
+    .l-title { 
+      font-family: 'Quicksand'; font-size: 1rem; font-weight: 700; 
+      color: var(--sage-text); text-align: center; margin-top: 5px;
+    }
+
+    /* MODAL - ORGANIC REVEAL */
+    #orchard-modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.95); z-index: 1000;
+      align-items: center; justify-content: center; backdrop-filter: blur(10px);
+    }
+    .modal-leaf {
+      max-width: 450px; padding: 60px; text-align: center;
+      border-radius: 100px 10px 100px 10px; background: #fff;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.05);
+      border: 1px solid var(--leaf-border);
+    }
+    .modal-leaf h2 { font-family: 'Playfair Display'; font-style: italic; font-size: 2.2rem; color: var(--sage-text); }
+    .modal-leaf p { color: #666; line-height: 1.8; margin: 20px 0; }
+    .close-leaf { background: var(--sage-text); color: #fff; border: none; padding: 12px 40px; border-radius: 30px; cursor: pointer; font-weight: 600; }
+  </style>
+
+  <div class="growth-vine">
+    <div class="leaf-node" onclick="openLeaf('Facility Management', 'Total building and infrastructure management services.')"><div class="l-id">UNIT_51</div><div class="l-title">Facility Mgmt</div></div>
+    <div class="leaf-node" onclick="openLeaf('Maintenance Ops', 'Operational maintenance and professional repair services.')"><div class="l-id">UNIT_52</div><div class="l-title">Maintenance</div></div>
+    <div class="leaf-node" onclick="openLeaf('Event Management', 'Expert planning and execution of corporate and business events.')"><div class="l-id">UNIT_53</div><div class="l-title">Event Mgmt</div></div>
+    <div class="leaf-node" onclick="openLeaf('Public Relations', 'Brand image management and strategic media communication.')"><div class="l-id">UNIT_54</div><div class="l-title">Public Relations</div></div>
+    <div class="leaf-node" onclick="openLeaf('Media Production', 'Photo, video, and high-end digital media creation.')"><div class="l-id">UNIT_55</div><div class="l-title">Media Production</div></div>
+    <div class="leaf-node" onclick="openLeaf('Advertising', 'Brand promotion through integrated online and offline channels.')"><div class="l-id">UNIT_56</div><div class="l-title">Advertising</div></div>
+    <div class="leaf-node" onclick="openLeaf('Printing Services', 'Professional printing for all business and marketing materials.')"><div class="l-id">UNIT_57</div><div class="l-title">Printing</div></div>
+    <div class="leaf-node" onclick="openLeaf('Packaging Design', 'Creative and functional product packaging solutions.')"><div class="l-id">UNIT_58</div><div class="l-title">Packaging Design</div></div>
+    <div class="leaf-node" onclick="openLeaf('Product Development', 'End-to-end product development from idea to launch.')"><div class="l-id">UNIT_59</div><div class="l-title">Product Dev</div></div>
+    <div class="leaf-node" onclick="openLeaf('Expansion Consulting', 'Strategic support for scaling, growth, and market expansion.')"><div class="l-id">UNIT_60</div><div class="l-title">Expansion</div></div>
+  </div>
+
+  <div id="orchard-modal">
+    <div class="modal-leaf">
+      <h2 id="l-title"></h2>
+      <p id="l-desc"></p>
+      <button class="close-leaf" onclick="closeLeaf()">Return to Orchard</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openLeaf(t, d) {
+    document.getElementById('l-title').innerText = t;
+    document.getElementById('l-desc').innerText = d;
+    document.getElementById('orchard-modal').style.display = 'flex';
+  }
+  function closeLeaf() {
+    document.getElementById('orchard-modal').style.display = 'none';
+  }
+</script>

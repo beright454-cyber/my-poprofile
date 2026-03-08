@@ -1,0 +1,130 @@
+<div id="ai-hub-container">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --ai-core: #00f2ff;
+      --deep-void: #02040a;
+      --card-bg: rgba(10, 20, 40, 0.9);
+    }
+
+    #ai-hub-container {
+      width: 100%; height: 600px; /* Reduced height for better fit */
+      background: var(--deep-void);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; perspective: 1200px;
+      font-family: 'JetBrains Mono', monospace;
+      position: relative;
+    }
+
+    /* CENTERED AI CORE */
+    .ai-core-center {
+      position: absolute; width: 80px; height: 80px;
+      background: var(--ai-core);
+      border-radius: 50%; box-shadow: 0 0 40px var(--ai-core);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10; animation: corePulse 3s infinite ease-in-out;
+    }
+    .ai-core-center::after {
+      content: "AI"; font-family: 'Orbitron'; color: #000; font-size: 1rem;
+    }
+
+    @keyframes corePulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 20px var(--ai-core); }
+      50% { transform: scale(1.1); box-shadow: 0 0 60px var(--ai-core); }
+    }
+
+    /* TIGHT ORBIT STAGE */
+    .orbit-stage {
+      position: relative; width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      display: flex; align-items: center; justify-content: center;
+      animation: rotateRing 30s linear infinite;
+    }
+
+    @keyframes rotateRing {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+
+    #ai-hub-container:hover .orbit-stage { animation-play-state: paused; }
+
+    /* COMPACT NODES */
+    .ai-node {
+      position: absolute; width: 220px; height: 70px;
+      background: var(--card-bg);
+      border-left: 3px solid var(--ai-core);
+      clip-path: polygon(0 0, 100% 0, 90% 100%, 0 100%);
+      padding: 12px; display: flex; flex-direction: column;
+      justify-content: center; transition: 0.4s;
+      backface-visibility: hidden; cursor: pointer;
+    }
+
+    /* 10-Point Radial Math (Tight Circle) */
+    .ai-node:nth-child(1)  { transform: rotateY(0deg)   translateZ(400px); }
+    .ai-node:nth-child(2)  { transform: rotateY(36deg)  translateZ(400px); }
+    .ai-node:nth-child(3)  { transform: rotateY(72deg)  translateZ(400px); }
+    .ai-node:nth-child(4)  { transform: rotateY(108deg) translateZ(400px); }
+    .ai-node:nth-child(5)  { transform: rotateY(144deg) translateZ(400px); }
+    .ai-node:nth-child(6)  { transform: rotateY(180deg) translateZ(400px); }
+    .ai-node:nth-child(7)  { transform: rotateY(216deg) translateZ(400px); }
+    .ai-node:nth-child(8)  { transform: rotateY(252deg) translateZ(400px); }
+    .ai-node:nth-child(9)  { transform: rotateY(288deg) translateZ(400px); }
+    .ai-node:nth-child(10) { transform: rotateY(324deg) translateZ(400px); }
+
+    .ai-node:hover {
+      background: var(--ai-core);
+      transform: rotateY(inherit) translateZ(450px) scale(1.1) !important;
+    }
+
+    .n-tag { color: var(--ai-core); font-size: 0.55rem; font-weight: 800; }
+    .ai-node:hover .n-tag { color: #000; }
+
+    .n-title { font-family: 'Orbitron'; color: #fff; font-size: 0.9rem; font-weight: 900; }
+    .ai-node:hover .n-title { color: #000; }
+
+    /* MODAL */
+    #ai-modal {
+      display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.95); z-index: 1000;
+      align-items: center; justify-content: center; backdrop-filter: blur(15px);
+    }
+    .modal-box {
+      border: 1px solid var(--ai-core); padding: 40px; background: #000;
+      max-width: 400px; text-align: center; color: #fff;
+    }
+    .close-btn { background: var(--ai-core); color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: 900; margin-top: 15px; }
+  </style>
+
+  <div class="ai-core-center"></div>
+
+  <div class="orbit-stage">
+    <div class="ai-node" onclick="showAI('CRM Solutions', 'Automated customer management systems.')"><div class="n-tag">021_CORE</div><div class="n-title">CRM SOLUTIONS</div></div>
+    <div class="ai-node" onclick="showAI('Data Analysis', 'Deep business data processing.')"><div class="n-tag">022_CORE</div><div class="n-title">DATA ANALYSIS</div></div>
+    <div class="ai-node" onclick="showAI('Cloud Solutions', 'Global infrastructure hosting.')"><div class="n-tag">023_CORE</div><div class="n-title">CLOUD SERVICES</div></div>
+    <div class="ai-node" onclick="showAI('Cybersecurity', 'Autonomous threat protection.')"><div class="n-tag">024_CORE</div><div class="n-title">CYBER SHIELD</div></div>
+    <div class="ai-node" onclick="showAI('IT Support', 'Technical system management.')"><div class="n-tag">025_CORE</div><div class="n-title">IT SUPPORT</div></div>
+    <div class="ai-node" onclick="showAI('System Integration', 'Connecting complex workflows.')"><div class="n-tag">026_CORE</div><div class="n-title">INTEGRATION</div></div>
+    <div class="ai-node" onclick="showAI('Automation', 'Robotic process efficiency.')"><div class="n-tag">027_CORE</div><div class="n-title">AUTO LOGIC</div></div>
+    <div class="ai-node" onclick="showAI('Project Mgmt', 'Full lifecycle management.')"><div class="n-tag">028_CORE</div><div class="n-title">PROJECT MGMT</div></div>
+    <div class="ai-node" onclick="showAI('Quality Assurance', 'Testing and standards control.')"><div class="n-tag">029_CORE</div><div class="n-title">QA PROTOCOL</div></div>
+    <div class="ai-node" onclick="showAI('Maintenance', 'Predictive system support.')"><div class="n-tag">030_CORE</div><div class="n-title">MAINTENANCE</div></div>
+  </div>
+
+  <div id="ai-modal">
+    <div class="modal-box">
+      <h2 id="m-title" style="color:var(--ai-core)"></h2>
+      <p id="m-desc"></p>
+      <button class="close-btn" onclick="closeAI()">DISCONNECT</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showAI(t, d) {
+    document.getElementById('m-title').innerText = t;
+    document.getElementById('m-desc').innerText = d;
+    document.getElementById('ai-modal').style.display = 'flex';
+  }
+  function closeAI() { document.getElementById('ai-modal').style.display = 'none'; }
+</script>

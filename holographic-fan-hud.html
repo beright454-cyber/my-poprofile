@@ -1,0 +1,135 @@
+<div id="sf-holographic-fan">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --gold-neon: #ffcc00;
+      --titanium: #e2e8f0;
+      --void: #050508;
+      --glass: rgba(20, 20, 25, 0.9);
+    }
+
+    #sf-holographic-fan {
+      width: 100%; height: 600px;
+      background: var(--void);
+      background-image: linear-gradient(to bottom, #0a0a0f 0%, #050508 100%);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; perspective: 1500px;
+      font-family: 'JetBrains Mono', monospace; position: relative;
+    }
+
+    /* THE FAN STAGE */
+    .fan-stage {
+      position: relative; width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      transform-style: preserve-3d;
+      animation: fanSwing 12s infinite ease-in-out;
+    }
+
+    @keyframes fanSwing {
+      0%, 100% { transform: rotateY(-15deg); }
+      50% { transform: rotateY(15deg); }
+    }
+
+    .f-node {
+      position: absolute; width: 260px; height: 120px;
+      background: var(--glass);
+      border-right: 4px solid var(--gold-neon);
+      border-top: 1px solid rgba(255, 204, 0, 0.3);
+      padding: 20px; cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      backface-visibility: hidden;
+    }
+
+    /* Fan-out positioning math */
+    .f-node:nth-child(1)  { transform: rotateY(-50deg) translateZ(400px); }
+    .f-node:nth-child(2)  { transform: rotateY(-40deg) translateZ(400px); }
+    .f-node:nth-child(3)  { transform: rotateY(-30deg) translateZ(400px); }
+    .f-node:nth-child(4)  { transform: rotateY(-20deg) translateZ(400px); }
+    .f-node:nth-child(5)  { transform: rotateY(-10deg) translateZ(400px); }
+    .f-node:nth-child(6)  { transform: rotateY(10deg) translateZ(400px); }
+    .f-node:nth-child(7)  { transform: rotateY(20deg) translateZ(400px); }
+    .f-node:nth-child(8)  { transform: rotateY(30deg) translateZ(400px); }
+    .f-node:nth-child(9)  { transform: rotateY(40deg) translateZ(400px); }
+    .f-node:nth-child(10) { transform: rotateY(50deg) translateZ(400px); }
+
+    .f-node:hover {
+      background: var(--gold-neon);
+      transform: translateZ(500px) scale(1.15) !important;
+      z-index: 100;
+    }
+
+    .f-id { font-size: 0.6rem; color: var(--gold-neon); font-weight: 800; }
+    .f-node:hover .f-id { color: #000; }
+
+    .f-title { font-family: 'Orbitron'; font-size: 1rem; font-weight: 900; color: #fff; margin-top: 5px; }
+    .f-node:hover .f-title { color: #000; }
+
+    .f-data { font-size: 0.5rem; color: rgba(255, 204, 0, 0.6); margin-top: 10px; border-top: 1px solid rgba(255,204,0,0.2); padding-top: 5px; }
+    .f-node:hover .f-data { color: rgba(0,0,0,0.6); border-color: rgba(0,0,0,0.2); }
+
+    /* MODAL */
+    #fan-modal {
+      display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.95); z-index: 1000;
+      align-items: center; justify-content: center; backdrop-filter: blur(20px);
+    }
+    .modal-content {
+      border: 2px solid var(--gold-neon); padding: 40px; background: #000;
+      max-width: 450px; text-align: left;
+    }
+    .modal-content h2 { font-family: 'Orbitron'; color: var(--gold-neon); margin-bottom: 15px; }
+    .modal-content p { color: #fff; line-height: 1.6; border-left: 3px solid var(--gold-neon); padding-left: 15px; }
+    .close-btn { background: var(--gold-neon); color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: 900; margin-top: 20px; }
+  </style>
+
+  <div class="fan-stage">
+    <div class="f-node" onclick="showFan('Technical Training', 'Comprehensive training programs for technical tools and modern systems.')">
+      <div class="f-id">MODULE::31</div><div class="f-title">TECH TRAINING</div><div class="f-data">STATUS: AUTHENTICATED</div>
+    </div>
+    <div class="f-node" onclick="showFan('Business Training', 'Advanced skill development and professional business knowledge training.')">
+      <div class="f-id">MODULE::32</div><div class="f-title">BIZ TRAINING</div><div class="f-data">STATUS: AUTHENTICATED</div>
+    </div>
+    <div class="f-node" onclick="showFan('Customer Support', 'Dedicated support systems engineered for maximum satisfaction.')">
+      <div class="f-id">MODULE::33</div><div class="f-title">CUST SUPPORT</div><div class="f-data">STATUS: ACTIVE</div>
+    </div>
+    <div class="f-node" onclick="showFan('Call Center Services', 'High-bandwidth inbound and outbound communication services.')">
+      <div class="f-id">MODULE::34</div><div class="f-title">CALL CENTER</div><div class="f-data">STATUS: ONLINE</div>
+    </div>
+    <div class="f-node" onclick="showFan('Virtual Assistance', 'Remote administrative and critical business support services.')">
+      <div class="f-id">MODULE::35</div><div class="f-title">VIRTUAL ASSIST</div><div class="f-data">STATUS: CONNECTED</div>
+    </div>
+    <div class="f-node" onclick="showFan('Documentation Services', 'Professional level business and technical documentation.')">
+      <div class="f-id">MODULE::36</div><div class="f-title">DOCU_SERVICES</div><div class="f-data">STATUS: VERIFIED</div>
+    </div>
+    <div class="f-node" onclick="showFan('Legal Documentation', 'Assistance in preparing business-critical legal documents.')">
+      <div class="f-id">MODULE::37</div><div class="f-title">LEGAL_DOCS</div><div class="f-data">STATUS: ENCRYPTED</div>
+    </div>
+    <div class="f-node" onclick="showFan('Accounting Services', 'Financial management, expert bookkeeping, and reporting.')">
+      <div class="f-id">MODULE::38</div><div class="f-title">ACCOUNTING</div><div class="f-data">STATUS: SECURE</div>
+    </div>
+    <div class="f-node" onclick="showFan('Tax Consultancy', 'Tax planning and regulatory compliance support services.')">
+      <div class="f-id">MODULE::39</div><div class="f-title">TAX_CONSULT</div><div class="f-data">STATUS: SECURE</div>
+    </div>
+    <div class="f-node" onclick="showFan('Financial Advisory', 'Expert financial planning and high-level advisory services.')">
+      <div class="f-id">MODULE::40</div><div class="f-title">FIN_ADVISORY</div><div class="f-data">STATUS: SECURE</div>
+    </div>
+  </div>
+
+  <div id="fan-modal">
+    <div class="modal-content">
+      <h2 id="m-title"></h2>
+      <p id="m-desc"></p>
+      <button class="close-btn" onclick="closeFan()">CLOSE DATA</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showFan(t, d) {
+    document.getElementById('m-title').innerText = t;
+    document.getElementById('m-desc').innerText = d;
+    document.getElementById('fan-modal').style.display = 'flex';
+  }
+  function closeFan() { document.getElementById('fan-modal').style.display = 'none'; }
+</script>

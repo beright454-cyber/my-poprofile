@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stark System Error - Service Selection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+            --neon-red: #ff003c;
+            --neon-green: #00ff88;
+            --bg-dark: #020406;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            background: var(--bg-dark);
+            height: 100vh; width: 100vw;
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+            color: white;
+        }
+
+        /* INITIAL TRIGGER BUTTON (The Core) */
+        #central-terminal {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px; height: 200px;
+            border: 2px solid var(--neon-blue);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 20px var(--neon-blue);
+            z-index: 10;
+            transition: 0.3s;
+        }
+
+        #central-terminal:hover {
+            background: rgba(0, 242, 255, 0.2);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        /* THE ERROR CARDS */
+        .error-card {
+            position: absolute;
+            width: 280px; height: 180px;
+            background: rgba(5, 10, 15, 0.95);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 15px;
+            display: none; /* Hidden until trigger */
+            flex-direction: column;
+            animation: spawn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            cursor: move;
+            z-index: 5;
+        }
+
+        .error-card header {
+            display: flex; justify-content: space-between;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px; margin-bottom: 10px;
+            font-size: 0.7rem; font-family: 'Orbitron';
+        }
+
+        .error-card .title { font-weight: bold; color: var(--neon-blue); font-size: 1rem; }
+        .error-card .desc { font-size: 0.75rem; color: #ccc; line-height: 1.4; }
+        
+        /* Different Glow Styles */
+        .style-red { border-color: var(--neon-red); box-shadow: 0 0 15px var(--neon-red); }
+        .style-red .title { color: var(--neon-red); }
+        .style-green { border-color: var(--neon-green); box-shadow: 0 0 15px var(--neon-green); }
+        .style-green .title { color: var(--neon-green); }
+
+        /* Animations */
+        @keyframes spawn {
+            0% { transform: scale(0) rotate(10deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .glitch-text {
+            position: fixed;
+            top: 10px; left: 10px;
+            color: var(--neon-red);
+            font-size: 0.8rem;
+            z-index: 100;
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="glitch-text" id="status-log">SYSTEM OVERLOAD: SERVICES UNPACKING...</div>
+
+    <div id="central-terminal" onclick="triggerOverload()">
+        <div style="text-align:center;">
+            <div style="font-family:'Orbitron';">INITIALIZE</div>
+            <div style="font-size:0.6rem;">CORE_v8.4</div>
+        </div>
+    </div>
+
+    <div id="desktop-viewport"></div>
+
+<script>
+    const services = [
+        { n: "Business Consulting", d: "Strategic roadmap for growth.", c: "blue" },
+        { n: "Cybersecurity", d: "Firewall and threat mitigation.", c: "red" },
+        { n: "Cloud Solutions", d: "Scalable server architecture.", c: "green" },
+        { n: "UI/UX Design", d: "User-centric interface engineering.", c: "blue" },
+        { n: "Market Research", d: "Competitive landscape analysis.", c: "green" },
+        { n: "Legal Support", d: "Compliance and documentation.", c: "red" },
+        // ... (You can add all 60 here)
+    ];
+
+    function triggerOverload() {
+        document.getElementById('central-terminal').style.display = 'none';
+        document.getElementById('status-log').style.display = 'block';
+        
+        services.forEach((service, index) => {
+            setTimeout(() => {
+                createCard(service);
+            }, index * 150); // Staggered entry like an error cascade
+        });
+    }
+
+    function createCard(data) {
+        const card = document.createElement('div');
+        card.className = `error-card style-${data.c}`;
+        
+        // Random Position on screen
+        const x = Math.random() * (window.innerWidth - 300);
+        const y = Math.random() * (window.innerHeight - 200);
+        card.style.left = `${x}px`;
+        card.style.top = `${y}px`;
+        card.style.display = 'flex';
+
+        card.innerHTML = `
+            <header>
+                <span>SERVICE_DAT_PACKET</span>
+                <span onclick="this.parentElement.parentElement.remove()" style="cursor:pointer;">[X]</span>
+            </header>
+            <div class="title">${data.n}</div>
+            <div class="desc">${data.d}</div>
+            <button style="margin-top:auto; background:none; border:1px solid currentColor; color:inherit; font-size:0.6rem; cursor:pointer; padding:3px;">SELECT_UNIT</button>
+        `;
+
+        document.getElementById('desktop-viewport').appendChild(card);
+        makeDraggable(card);
+    }
+
+    function makeDraggable(el) {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        el.onmousedown = dragMouseDown;
+
+        function dragMouseDown(e) {
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+            el.style.zIndex = 1000; // Bring to front
+        }
+
+        function elementDrag(e) {
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            el.style.top = (el.offsetTop - pos2) + "px";
+            el.style.left = (el.offsetLeft - pos1) + "px";
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+</script>
+</body>
+</html>
